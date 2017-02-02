@@ -5,22 +5,24 @@ import com.hazelcast.core.Hazelcast
 import com.hazelcast.core.HazelcastInstance
 import com.rackspace.vdo.stdlib.logging.Logger
 import com.rackspace.vdo.stdlib.logging.LoggerFactory
+import org.springframework.beans.factory.InitializingBean
 
 /**
  * Created by anil1693 on 2/1/17.
  */
-class HazelcastInstanceService {
+class HazelcastInstanceService implements InitializingBean {
 
     Logger log = LoggerFactory.getLogger(getClass().name)
 
-    /**
-     * Creates a new Hazelcast instance from the given Map of configuration values.
-     *
-     * @param configuration
-     * @return String
-     */
-    void createInstances(List<Map> configurations) {
-        configurations.each  {instanceConfig ->
+    List<Map> configurations
+
+    HazelcastInstanceService(List<Map> configurations) {
+        this.configurations = configurations
+    }
+
+    @Override
+    void afterPropertiesSet() throws Exception {
+        configurations.each { instanceConfig ->
             Config hazelConfig = createConfig(instanceConfig)
             try {
                 createInstance(hazelConfig)

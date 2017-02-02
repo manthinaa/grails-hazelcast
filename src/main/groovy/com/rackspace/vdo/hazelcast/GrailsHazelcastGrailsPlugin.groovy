@@ -50,12 +50,7 @@ Brief summary/description of the plugin.
             def instances = grailsApplication.config.hazelcast.instances
             log.info("Hazelcast instances configured: ${instances}")
 
-            hazelcastInstanceService(HazelcastInstanceService)
-            "CreateInstance"(MethodInvokingFactoryBean) {
-                targetObject = ref('hazelcastInstanceService')
-                targetMethod = 'createInstances'
-                arguments = [instances]
-            }
+            hazelcastInstanceService(HazelcastInstanceService, instances)
         }
     }
 
